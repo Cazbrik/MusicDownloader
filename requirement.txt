@@ -1,0 +1,9 @@
+argparse
+logging
+requests
+shutil
+pathlib
+mutagen
+json
+re
+youtube_dl
