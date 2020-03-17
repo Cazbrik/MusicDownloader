@@ -1,2 +1,3 @@
 # MusicDownloader
-Program that find, download and metadata to music file
+Program that find, download and add metadata to music file
+

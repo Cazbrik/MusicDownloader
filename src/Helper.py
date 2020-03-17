@@ -14,12 +14,6 @@ class Searcher(object):
         self.logger = logging.getLogger("Searcher")
         self.client = DeezerClient()
 
-    def infos(self, track: str = None, album: str = None, artist: str = None) -> Artist:
-        if track: return self.trackInfo(track)
-        elif album: return self.albumInfo(album)
-        elif artist: return self.artistInfo(artist)
-        else: raise Exception("you have to provide at least one information (track, album, or artist name)!")
-
     def trackInfo(self, name: str) -> Artist:
         self.logger.warning("looking for track: '" + name + "' informations")
         artist, albumId, track = self.client.findTrack(name)
@@ -61,7 +55,7 @@ class Downloader(object):
         with open(outPath, 'wb') as outFile: shutil.copyfileobj(response.raw, outFile)
 
     def trackDl(self, track: Track, artistName: str, albumName: str, albumGenres: list, albumDate: str, path: str = ".") -> None:
-        urlVid = self.client.search(track.name)
+        urlVid = self.client.search(track.name + " " + artistName)
         outPath = path + '/' + re.sub(r'[^\w\-_\.]', '', track.name)
         self.client.download(urlVid, outPath)
         audio = EasyID3(outPath + ".mp3")

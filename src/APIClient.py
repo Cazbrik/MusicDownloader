@@ -78,6 +78,7 @@ class YoutubeClient(object):
         ydl_opts = {
             'format': 'bestaudio/best',
             'outtmpl': outPath + '.%(ext)s',
+            'ignoreerrors': True,
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
