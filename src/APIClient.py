@@ -26,7 +26,7 @@ class DeezerClient(object):
         url = self.DEEZER_API + "search/" + path + "?q=" + name
         self.logger.warning("search for: " + name + " in: " + path)
         data = self.__request(url)
-        if len(data.keys()) == 0: raise Exception("Can not find corresponding result for :" + path + " and " + name)
+        if len(data.keys()) == 0 or len(data['data']) == 0: raise Exception("Can not find corresponding result for the " + path + ": " + name)
         return data["data"][0]
 
     #  search methods #

@@ -55,16 +55,19 @@ class Downloader(object):
         with open(outPath, 'wb') as outFile: shutil.copyfileobj(response.raw, outFile)
 
     def trackDl(self, track: Track, artistName: str, albumName: str, albumGenres: list, albumDate: str, path: str = ".") -> None:
-        urlVid = self.client.search(track.name + " " + artistName)
+        urlVid = self.client.search(track.name + " " + artistName + " -live")
         outPath = path + '/' + re.sub(r'[^\w\-_\.]', '', track.name)
         self.client.download(urlVid, outPath)
-        audio = EasyID3(outPath + ".mp3")
-        audio['title'] = track.name
-        audio['artist'] = artistName
-        audio['album'] = albumName
-        audio['genre'] = albumGenres[0]
-        audio['date'] = albumDate
-        audio.save()
+        try:
+            audio = EasyID3(outPath + ".mp3")
+            audio['title'] = track.name
+            audio['artist'] = artistName
+            audio['album'] = albumName
+            audio['genre'] = albumGenres[0]
+            audio['date'] = albumDate
+            audio.save()
+        except:
+            pass
 
     def albumDl(self, album: Album, artistName: str, path: str = ".") -> None:
         if not album: raise Exception("You should provide an album object to download !")
@@ -81,3 +84,5 @@ class Downloader(object):
         Path(folderPath).mkdir(parents=True, exist_ok=True)
         self.pictureDl(artist.picture, folderPath + '/' + re.sub(r'[^\w\-_\.]', '', artist.name + '.jpg'))
         for album in artist.albums: self.albumDl(album, artist.name, folderPath)
+
+

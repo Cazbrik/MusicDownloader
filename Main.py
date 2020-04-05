@@ -16,7 +16,7 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--download", help="download the track(s) found", action="store_true", default=False)
 
     args = vars(parser.parse_args())
-    logging.basicConfig(stream=sys.stdout, format="[DEBUG] %(message)s", level=logging.WARN if args["verbose"] else logging.FATAL)
+    logging.basicConfig(stream=sys.stdout, format="[Info] %(message)s", level=logging.WARN if args["verbose"] else logging.FATAL)
     
     if not any(args.values()):
         parser.print_help()
@@ -25,20 +25,31 @@ if __name__ == "__main__":
     client = Searcher()
     dl = Downloader()
 
+    logger = logging.getLogger("MusicDownloader")
+
     if args["artist"]:
         for art in args["artist"]:
-            artist = Searcher().artistInfo(art)
-            if args["download"]: dl.artistDl(artist, "music")
-            else: print(artist)
+            try:
+                artist = Searcher().artistInfo(art)
+                if args["download"]: dl.artistDl(artist, "music")
+                else: print(artist)
+            except Exception as e:
+                logger.fatal(str(e))
 
     if args["collection"]:
         for col in args["collection"]:
-            artist = Searcher().albumInfo(col)
-            if args["download"]: dl.artistDl(artist, "music")
-            else: print(artist)
+            try:
+                artist = Searcher().albumInfo(col)
+                if args["download"]: dl.artistDl(artist, "music")
+                else: print(artist)
+            except Exception as e:
+                logger.fatal(str(e))
     
     if args["track"]:
         for tra in args["track"]:
-            artist = Searcher().trackInfo(tra)
-            if args["download"]: dl.artistDl(artist, "music")
-            else: print(artist)
+            try:
+                artist = Searcher().trackInfo(tra)
+                if args["download"]: dl.artistDl(artist, "music")
+                else: print(artist)
+            except Exception as e:
+                logger.fatal(str(e))
